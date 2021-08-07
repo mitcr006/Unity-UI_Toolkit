@@ -2,26 +2,26 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
-using UnityEngine.Events;
 
 public class ModalWindow : MonoBehaviour
 {
+    ModalWindowObjectNode modalNode;
 
     [Header("Header")]
     [SerializeField]
     private Transform headerTransform;
     [SerializeField]
-    public TextMeshProUGUI headerTextField;
+    private TextMeshProUGUI headerTextField;
 
     [Header("Content")]
     [SerializeField]
     private Transform contentTransform;
     [SerializeField]
-    public TextMeshProUGUI contentTextField;
+    private TextMeshProUGUI contentTextField;
     [SerializeField]
     private GameObject contentImageGameObject;
     [SerializeField]
-    public Image contentImage;
+    private Image contentImage;
 
 
     [Header("Footer")]
@@ -30,17 +30,17 @@ public class ModalWindow : MonoBehaviour
     [SerializeField]
     private Button confirmButton;
     [SerializeField]
-    public TextMeshProUGUI confirmButtonText;
+    private TextMeshProUGUI confirmButtonText;
     [Space]
     [SerializeField]
     private Button extraButton;
     [SerializeField]
-    public TextMeshProUGUI extraButtonText;
+    private TextMeshProUGUI extraButtonText;
     [Space]
     [SerializeField]
     private Button cancelButton;
     [SerializeField]
-    public TextMeshProUGUI cancelButtonText;
+    private TextMeshProUGUI cancelButtonText;
 
     [SerializeField]
     private Image headerColor;
@@ -81,25 +81,44 @@ public class ModalWindow : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    public void CreateModalWindow(ModalWindowObjectNode modalNode, Action confirm, Action additional, Action cancel)
+    public void CreateModalWindow(ModalWindowObjectNode modalWindowNode, Action confirm, Action additional, Action cancel)
+    {
+        modalNode = modalWindowNode;
+        AssignActions(confirm, additional, cancel);
+        AssignHeaderData();
+        AssignContentData();
+        AssignButtonData();
+        ApplyCustomColorPallet();
+    }
+
+    private void AssignActions(Action confirm, Action additional, Action cancel)
     {
         onConfirmAction += confirm;
         onCancelAction += cancel;
         onExtraAction += additional;
+    }
 
+    private void AssignHeaderData()
+    {
         if (modalNode.headerText.Length != 0)
         {
             headerTransform.gameObject.SetActive(true);
             headerTextField.text = modalNode.headerText;
         }
+    }
 
+    private void AssignContentData()
+    {
         contentTextField.text = modalNode.bodyText;
         if (modalNode.bodyImage != null)
         {
             contentImageGameObject.SetActive(true);
             contentImage.sprite = modalNode.bodyImage;
         }
+    }
 
+    private void AssignButtonData()
+    {
         confirmButtonText.text = modalNode.confirmButtonText;
 
         if (modalNode.additionalButtonText.Length != 0)
@@ -113,8 +132,8 @@ public class ModalWindow : MonoBehaviour
             cancelButton.gameObject.SetActive(true);
             cancelButtonText.text = modalNode.cancelButtonText;
         }
-        ApplyCustomColorPallet();
     }
+
     private void ApplyCustomColorPallet()
     {
         ModalWindowCustomColorPallet customPallet = Resources.Load<ModalWindowCustomColorPallet>("UI_Toolkit/Color_Pallets/ModalCustomColorPallet");
