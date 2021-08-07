@@ -44,6 +44,7 @@ public class ModalWindowCreationWindow : EditorWindow
                     string[] files = Directory.GetFiles("Assets/Resources/UI_Toolkit/Modal_Windows");
                     AssetDatabase.CreateAsset(windowToCreate, "Assets/Resources/UI_Toolkit/Modal_Windows/newWindow" + files.Length + ".asset");
                 }
+                this.Close();
             }
         }
     }

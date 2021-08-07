@@ -33,6 +33,7 @@ public class ModalCustomColorPalletWindow : EditorWindow
                     AssetDatabase.CreateFolder("Assets/Resources/UI_Toolkit", "Color_Pallets");
                 }
                 AssetDatabase.CreateAsset(palletToCreate, "Assets/Resources/UI_Toolkit/Color_Pallets/ModalCustomColorPallet.asset");
+                this.Close();
             }
         }
     }
